@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ImageBackground, Dimensions, Image } from 'react-native';
 
 import Button from '../commons/Button';
+import { strings } from '../lang/Strings';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,8 +44,8 @@ class Form extends Component {
       >
       <Image source={require('../img/logo.png')} />
 
-      {this.renderSection('konumunuz')}
-      {this.renderSection('sevdiceğin konumu')}
+      {this.renderSection(strings.location)}
+      {this.renderSection(strings.loveLocation)}
       
       <View style={styles.PickerMainViewStyle}>
         {this.renderPickerButton(' senin fotoğrafın')}
