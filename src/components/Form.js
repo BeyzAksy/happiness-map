@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
-import { View, Text, ImageBackground, Dimensions, Image } from 'react-native';
+import { View, Text, ImageBackground, Dimensions, Image, TouchableOpacity } from 'react-native';
+import RNGooglePlaces from 'react-native-google-places';
 
 import Button from '../commons/Button';
-import { strings } from '../lang/Strings';
 
 const { width, height } = Dimensions.get('window');
 
 class Form extends Component {
 
-  renderSection(text) {
+  renderSection(text, onPress) {
     return (
-      <View style={styles.section}>
-        <View style={{ flex: 1, justifyContent: 'space-between',
+        <TouchableOpacity
+        onPress={ onPress }
+        >
+          <View style={styles.section}>
+            <View style={{ flex: 1, justifyContent: 'space-between',
               flexDirection: 'row', alignItems: 'center' }}>
 
-          <Text style={{ flex: 9, textAlign: 'center' }}>{text}</Text>
-          <Image source={require('../img/ok.png')} />
+              <Text style={{ flex: 9, textAlign: 'center' }}>{text}</Text>
+              <Image source={require('../img/ok.png')} />
 
+            </View>
         </View>
-      </View>
+        </TouchableOpacity>
+      
     );
   }
   renderPickerButton(text){
@@ -35,6 +40,17 @@ class Form extends Component {
      
     );
   }
+
+  openSearchModal(type) {
+    RNGooglePlaces.openAutocompleteModal()
+      .then((place) => {
+        console.log(place);
+        // place represents user's selection from the
+        // suggestions and it is a simplified Google Place object.
+      })
+      .catch(error => console.log(error.message));  // error is a Javascript Error object
+  }
+
   render() {
     return (
       <ImageBackground
@@ -44,8 +60,10 @@ class Form extends Component {
       >
       <Image source={require('../img/logo.png')} />
 
-      {this.renderSection(strings.location)}
-      {this.renderSection(strings.loveLocation)}
+      {this.renderSection('konumunuz',
+          () => this.openSearchModal('my'))}
+      {this.renderSection('sevdiceğin konumu',
+          () => this.openSearchModal('love'))}
       
       <View style={styles.PickerMainViewStyle}>
         {this.renderPickerButton(' senin fotoğrafın')}
