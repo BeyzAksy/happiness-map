@@ -8,7 +8,26 @@ const { width, height } = Dimensions.get('window');
 
 class Form extends Component {
 
-  renderSection(text, onPress) {
+  state = {
+    yourLocation: '',
+    loveLocaiton: '',
+    yourimgOk: require('../img/ok.png'),
+    loveimgOk: require('../img/ok.png'),
+    yourLangLat: [],
+    loveLangLat: []
+  }
+
+  componentWillMount(){
+      this.setState({
+        yourLocation: 'konumunuz',
+        loveLocaiton: 'sevdiceğin konumu',
+        yourimgOk: require('../img/ok.png'),
+        loveimgOk: require('../img/ok.png')
+        
+      })
+  }
+
+  renderSection(text, onPress, img) {
     return (
         <TouchableOpacity
         onPress={ onPress }
@@ -18,7 +37,7 @@ class Form extends Component {
               flexDirection: 'row', alignItems: 'center' }}>
 
               <Text style={{ flex: 9, textAlign: 'center' }}>{text}</Text>
-              <Image source={require('../img/ok.png')} />
+              <Image source={ img } />
 
             </View>
         </View>
@@ -45,8 +64,17 @@ class Form extends Component {
     RNGooglePlaces.openAutocompleteModal()
       .then((place) => {
         console.log(place);
-        // place represents user's selection from the
-        // suggestions and it is a simplified Google Place object.
+        if(type === 'my') {
+          this.setState({ 
+            yourLocation: place.name,
+            yourimgOk: require('../img/check.png'),
+            yourLangLat: [place.latitude, place.longitude]})
+        } else {
+          this.setState({ 
+            loveLocaiton: place.name,
+            loveimgOk: require('../img/check.png'),
+            loveLangLat: [place.latitude, place.longitude]})
+        }
       })
       .catch(error => console.log(error.message));  // error is a Javascript Error object
   }
@@ -60,10 +88,12 @@ class Form extends Component {
       >
       <Image source={require('../img/logo.png')} />
 
-      {this.renderSection('konumunuz',
-          () => this.openSearchModal('my'))}
-      {this.renderSection('sevdiceğin konumu',
-          () => this.openSearchModal('love'))}
+      {this.renderSection(this.state.yourLocation,
+          () => this.openSearchModal('my'),
+          this.state.yourimgOk)}
+      {this.renderSection(this.state.loveLocaiton,
+          () => this.openSearchModal('love'),
+          this.state.loveimgOk)}
       
       <View style={styles.PickerMainViewStyle}>
         {this.renderPickerButton(' senin fotoğrafın')}
