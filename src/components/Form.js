@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ImageBackground, Dimensions, Image, TouchableOpacity } from 'react-native';
 import RNGooglePlaces from 'react-native-google-places';
+import ImagePicker from 'react-native-image-picker';
 
 import Button from '../commons/Button';
 
@@ -14,7 +15,9 @@ class Form extends Component {
     yourimgOk: require('../img/ok.png'),
     loveimgOk: require('../img/ok.png'),
     yourLangLat: [],
-    loveLangLat: []
+    loveLangLat: [],
+    myPhoto: '',
+    lovePhoto: ''
   }
 
   componentWillMount(){
@@ -45,9 +48,27 @@ class Form extends Component {
       
     );
   }
-  renderPickerButton(text){
+
+  showPhoto(type, text, onPress){
+    return(
+      <TouchableOpacity
+        onPress={onPress}
+      >
+        <Image
+          source={type === 'my'? this.state.myPhoto : this.state.lovePhoto}
+          style={styles.photoStyle} />
+
+        <Text style={styles.pickerTextStyle}>{text}</Text>
+
+      </TouchableOpacity>     
+    )
+  }
+
+  renderPickerButton(text, onPress){
     return (
-      <View>
+      <TouchableOpacity
+      onPress={ onPress }
+      >
 
         <View style={styles.pickerButtonStyle}>
           <Image source={require('../img/add.png')} />
@@ -55,7 +76,7 @@ class Form extends Component {
 
         <Text style={styles.pickerTextStyle}>{text}</Text>
 
-      </View>
+      </TouchableOpacity>
      
     );
   }
@@ -79,6 +100,46 @@ class Form extends Component {
       .catch(error => console.log(error.message));  // error is a Javascript Error object
   }
 
+  openImagePicker(type){
+    const options = {
+      title: 'Fotoğraf Seç',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      takePhotoButtonTitle: 'Fotoğraf Çek',
+      chooseFromLibraryButtonTitle: 'Galeriden Seç',
+      cancelButtonTitle: 'Kapat',
+      maxWidth:500,
+      maxHeight:500,
+      quality:0.5
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {  
+
+        const source = { uri: response.uri };
+
+        if(type === 'my'){
+          this.setState({
+            myPhoto: source,
+          });
+        }else {
+          this.setState({
+            lovePhoto: source,
+          });
+        }
+      }
+    });
+
+  }
+
   render() {
     return (
       <ImageBackground
@@ -96,8 +157,21 @@ class Form extends Component {
           this.state.loveimgOk)}
       
       <View style={styles.PickerMainViewStyle}>
-        {this.renderPickerButton(' senin fotoğrafın')}
-        {this.renderPickerButton('sevdiceğin fotoğrafı')}
+
+        {this.state.myPhoto !== '' ?
+          this.showPhoto('my',' senin fotoğrafın',
+          () => this.openImagePicker('my')) :         
+          this.renderPickerButton(' senin fotoğrafın',
+          () => this.openImagePicker('my'))
+        }
+
+        {this.state.lovePhoto !== '' ?
+          this.showPhoto('love','sevdiceğin fotoğrafı',
+          () => this.openImagePicker('love')) :
+          this.renderPickerButton('sevdiceğin fotoğrafı',
+          () => this.openImagePicker('love'),)
+        }
+
       </View>
       
       <Button text='Yol Haritası Oluştur' />
@@ -107,6 +181,11 @@ class Form extends Component {
   }
 }
 const styles = {
+  photoStyle:{
+    width: width * 0.24,
+    height: width * 0.24,
+    borderRadius: (width * 0.24) / 2
+  },
   section: {
     marginTop: 20,
     backgroundColor: 'white',
