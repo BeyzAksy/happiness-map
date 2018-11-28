@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 class Button extends Component {
     render() {
         return (
-            <View style={{
+            <TouchableOpacity style={{
                 width: width * 0.71,
                 height: height * 0.07,
                 backgroundColor: '#53008C',
@@ -14,11 +14,12 @@ class Button extends Component {
                 borderRadius: 10,
                 alignItems: 'center',
                 justifyContent: 'center'
-            }}>
+            }}
+            onPress={()=> this.props.onPress()}>
 
             <Text style={{ color: 'white' }}>{this.props.text}</Text>
 
-            </View>
+            </TouchableOpacity>
         );
     }
 }

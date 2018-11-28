@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Scene, Router, Actions } from 'react-native-router-flux';
+import { Scene, Router } from 'react-native-router-flux';
 
 import Form from './components/Form';
+import Map from './components/Map';
 
 export default class Root extends Component {
   render() {
@@ -15,6 +15,13 @@ export default class Root extends Component {
           hideNavBar
           initial
           />
+
+          <Scene
+            key='Map'
+            component={Map}
+            hideNavBar
+          />
+
         </Scene>
       </Router>
     );

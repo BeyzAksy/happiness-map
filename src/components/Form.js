@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ImageBackground, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+
 import RNGooglePlaces from 'react-native-google-places';
 import ImagePicker from 'react-native-image-picker';
 
@@ -174,7 +176,17 @@ class Form extends Component {
 
       </View>
       
-      <Button text='Yol Haritası Oluştur' />
+      <Button 
+      onPress={() =>Actions.Map({
+        data: {
+          yourLangLat: this.state.yourLangLat,
+          loveLangLat: this.state.loveLangLat,
+          myPhoto: this.state.myPhoto,
+          lovePhoto: this.state.lovePhoto         
+        }
+      })
+      }
+      text='Yol Haritası Oluştur' />
 
       </ImageBackground>
     );
