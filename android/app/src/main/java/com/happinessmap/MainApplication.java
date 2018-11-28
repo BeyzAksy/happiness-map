@@ -10,6 +10,7 @@ import com.facebook.soloader.SoLoader;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new ReactNativeLocalizationPackage(),
               new RNGooglePlacesPackage(),
-              new ImagePickerPackage()
+              new ImagePickerPackage(),
+              new MapsPackage()
       );
     }
 
